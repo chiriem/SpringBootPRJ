@@ -148,6 +148,7 @@ public class MelonMapper extends AbstractMongoDBComon implements IMelonMapper {
             rMap = null;
             doc = null;
 
+
         }
 
         rs = null;
