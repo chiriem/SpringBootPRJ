@@ -1,5 +1,6 @@
 package kopo.poly.service.impl;
 
+import kopo.poly.dto.MelonDTO;
 import kopo.poly.dto.MongoDTO;
 import kopo.poly.persistance.mongodb.IMongoMapper;
 import kopo.poly.service.IMongoService;
@@ -7,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Slf4j
 @Service("MongoService")

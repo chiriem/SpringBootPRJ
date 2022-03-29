@@ -160,4 +160,82 @@ public class MelonMapper extends AbstractMongoDBComon implements IMelonMapper {
         return rList;
     }
 
+    @Override
+    public List<MelonDTO> getSingerSong(String pColNm, String pSinger) throws Exception{
+
+        log.info(this.getClass().getName() + ".getSingerSong Start!");
+
+        List<MelonDTO> rList = new LinkedList<>();
+
+        MongoCollection<Document> col = mongodb.getCollection(pColNm);
+
+        // 조회할 조건(SQL의 WHERE 역할 / SELECT song, singer FROM MELON_2022**** where singer = '방탄소년단')
+        Document query = new Document();
+        query.append("singer", pSinger);
+
+        // 조회 결과 중 출력할 컬럼들(SQL의 SELECT절, FROM절 가운데 컬럼들과 유사함)
+        Document projection = new Document();
+        projection.append("song", "$song");
+        projection.append("singer", "$singer");
+
+        projection.append("_id", 0);
+
+        FindIterable<Document> rs = col.find(query).projection(projection);
+
+        for (Document doc : rs) {
+            if (doc == null) {
+                doc = new Document();
+
+            }
+
+            // 조회 잘 되나 출력해 보기
+            String song = CmmUtil.nvl(doc.getString("song"));
+            String singer = CmmUtil.nvl(doc.getString("singer"));
+
+            log.info("song : " + song);
+            log.info("singer : " + singer);
+
+            MelonDTO rDTO = new MelonDTO();
+
+            rDTO.setSong(song);
+            rDTO.setSinger(singer);
+
+            rList.add(rDTO);
+        }
+        log.info(this.getClass().getName() + ".getSingerSong End!");
+
+        return rList;
+    }
+
+    @Override
+    public int insertSongMany(List<MelonDTO> pList, String colNm) throws Exception {
+
+        log.info(this.getClass().getName() + ".insertSongMany Start!");
+
+        int res = 0;
+
+        if (pList == null) {
+            pList = new LinkedList<>();
+        }
+
+        // 데이터를 저장할 컬렉션 생성
+        super.createCollection(colNm, "collectTime");
+
+        // 저장할 컬렉션 객체 생성
+        MongoCollection<Document> col = mongodb.getCollection(colNm);
+
+        List<Document> list = new ArrayList<>();
+
+        // 람다식 활용 stream과 -> 사용
+        pList.stream().forEach(melon -> list.add(new Document(new ObjectMapper().convertValue(melon, Map.class))));
+
+        // 레코드 리스트 단위로 한번에 저장하기
+        col.insertMany(list);
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".insertSongMany End!");
+
+        return res;
+    }
 }
