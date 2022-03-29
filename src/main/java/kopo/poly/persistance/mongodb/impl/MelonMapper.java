@@ -105,12 +105,12 @@ public class MelonMapper extends AbstractMongoDBComon implements IMelonMapper {
     }
 
     @Override
-    public List<Map<String, Object>> getSingerSongCnt(String colNm) throws Exception {
+    public List<MelonDTO> getSingerSongCnt(String colNm) throws Exception {
 
         log.info(this.getClass().getName() + ".getSingerSongCnt Start!");
 
         // 조회 결과를 전달하기 위한 객체 생성하기
-        List<Map<String, Object>> rList = new LinkedList<Map<String, Object>>();
+        List<MelonDTO> rList = new LinkedList<>();
 
         // MongoDB 조회 쿼리
         List<? extends Bson> pipeline = Arrays.asList(
@@ -138,14 +138,14 @@ public class MelonMapper extends AbstractMongoDBComon implements IMelonMapper {
             log.info("singer : " + singer);
             log.info("singerCnt : " + singerCnt);
 
-            Map<String, Object> rMap = new LinkedHashMap<String, Object>();
+            MelonDTO rDTO = new MelonDTO();
 
-            rMap.put("singer", singer);
-            rMap.put("singerCnt", singerCnt);
+            rDTO.setSinger(singer);
+            rDTO.setSingerCnt(singerCnt);
 
-            rList.add(rMap);
+            rList.add(rDTO);
 
-            rMap = null;
+            rDTO = null;
             doc = null;
 
 

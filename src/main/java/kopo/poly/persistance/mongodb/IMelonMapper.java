@@ -11,5 +11,5 @@ public interface IMelonMapper {
 
     List<MelonDTO> getSongList(String colNm) throws Exception;
 
-    List<Map<String, Object>> getSingerSongCnt(String colNm) throws  Exception;
+    List<MelonDTO> getSingerSongCnt(String colNm) throws  Exception;
 }

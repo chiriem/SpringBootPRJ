@@ -101,13 +101,13 @@ public class MelonService implements IMelonService {
     }
 
     @Override
-    public List<Map<String, Object>> getSingerSongCnt() throws Exception {
+    public List<MelonDTO> getSingerSongCnt() throws Exception {
 
         log.info(this.getClass().getName() + ".getSingerSongList Start!");
 
         String colNm = "MELON_" + DateUtil.getDateTime("yyyyMMdd");
 
-        List<Map<String, Object>> rList = melonMapper.getSingerSongCnt(colNm);
+        List<MelonDTO> rList = melonMapper.getSingerSongCnt(colNm);
 
         if (rList == null) {
             rList = new LinkedList<>();

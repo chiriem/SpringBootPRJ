@@ -60,11 +60,11 @@ public class MelonController {
      * 가수별 수집된 노래의 수 가져오기
      */
     @GetMapping(value = "melon/getSingerSongCnt")
-    public List<Map<String, Object>> getSingerSongCnt() throws Exception {
+    public List<MelonDTO> getSingerSongCnt() throws Exception {
 
         log.info(this.getClass().getName() + ".getSingerSongList Start!");
 
-        List<Map<String, Object>> rList = melonService.getSingerSongCnt();
+        List<MelonDTO> rList = melonService.getSingerSongCnt();
 
         log.info(this.getClass().getName() + ".getSingerSongList Start!");
 
