@@ -98,6 +98,7 @@ public class MelonController {
 
         int res = melonService.collectMelonSongMany();
 
+
         if (res == 1) {
             msg = "success";
         } else {
