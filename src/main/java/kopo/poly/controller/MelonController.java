@@ -92,7 +92,7 @@ public class MelonController {
     @GetMapping(value = "melon/collectMelonSongMany")
     public String collectMelonSongMany() throws Exception {
 
-        log.info(this.getClass().getName() + ".collectMelonSongMany Start!");
+        log.info(this.getClass().getName() + ".collectMelonSongMany Start!!");
 
         String msg;
 
