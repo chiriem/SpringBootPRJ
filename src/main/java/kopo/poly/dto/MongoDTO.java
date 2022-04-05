@@ -10,4 +10,5 @@ public class MongoDTO {
     String user_nm;
     String addr;
     String email;
+
 }
