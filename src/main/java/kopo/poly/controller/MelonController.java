@@ -110,4 +110,29 @@ public class MelonController {
 
         return msg;
     }
+
+    /**
+     * 가수 이름 방탄소년단을 BTS로 변경
+     */
+    @GetMapping(value = "melon/updateBTSName")
+    public String updateBTSName() throws Exception {
+
+        log.info(this.getClass().getName() + ".updateBTSName Start!");
+
+        // 결과 출력
+        String msg;
+
+        int res = melonService.updateBTSName();
+
+        if (res == 1) {
+            msg = "success";
+
+        } else {
+            msg = "fail";
+        }
+
+        log.info(this.getClass().getName() + ".updateBTSName End!");
+
+        return msg;
+    }
 }

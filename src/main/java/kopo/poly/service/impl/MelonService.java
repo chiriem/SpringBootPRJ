@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.LinkedList;
-import java.util.Map;
 
 @Slf4j
 @Service("MelonService")
@@ -194,6 +193,34 @@ public class MelonService implements IMelonService {
         res = melonMapper.insertSongMany(pList, colNm);
 
         log.info(this.getClass().getName() + ".collectMelonSongMany Start!");
+
+        return res;
+    }
+
+    @Override
+    public int updateBTSName() throws Exception {
+
+        log.info(this.getClass().getName() + ".updateBTSName Start!");
+
+        int res = 0;
+
+        String colNm = "MELON_" + DateUtil.getDateTime("yyyyMMdd");
+
+        // 기존 수집된 멜론 Top100 수집한 컬렉션 삭제
+        melonMapper.dropMelonCollection(colNm);
+
+        if (this.collectMelonSong() == 1) {
+
+            // 수집된 데이터로부터 변경을 위해 찾을 가수명
+            String singer = "방탄소년단";
+
+            // 수집된 데이터로부터 변경할 가수명
+            String updateSinger = "BTS";
+
+            res = melonMapper.updateSong(colNm, singer, updateSinger);
+        }
+
+        log.info(this.getClass().getName() + ".updateBTSName End!");
 
         return res;
     }
