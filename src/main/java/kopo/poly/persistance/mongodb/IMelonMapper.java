@@ -31,7 +31,22 @@ public interface IMelonMapper {
     int updateSong(String colNm, String singer, String updateSinger) throws Exception;
 
     /**
-     * singer 필드의 값인 방탄소년단을 BTS로 변경하기
+     * 가수의 NickName 필드 추가 및 값 저장
+     *
+     * @param colNm 저장할 컬렉션 이름
+     * @param singer 추가를 위해 검색할 가수이름
+     * @param nickname 추가할 서브 가수 이름
+     * @return 저장결과
      */
-    int updateBTSName() throws Exception;
+    int updateSongAddField(String colNm, String singer, String nickname) throws Exception;
+
+    /**
+     * 가수의 Member 필드 추가 및 BTS 멤버 이름 List로 저장하기
+     *
+     * @param colNm 저장할 컬렉션 이름
+     * @param singer 추가를 위해 검색할 가수이름
+     * @param member BTS 멤버 이름들을 추가
+     * @return 저장 결과
+     */
+    int updateSongAddListField(String colNm, String singer, List<String> member) throws Exception;
 }
