@@ -1,5 +1,7 @@
 package kopo.poly.service.impl;
 
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
 import kopo.poly.dto.MelonDTO;
 import kopo.poly.persistance.mongodb.IMelonMapper;
 import kopo.poly.service.IMelonService;
@@ -13,6 +15,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.security.cert.CollectionCertStoreParameters;
 import java.util.Arrays;
 import java.util.List;
 import java.util.LinkedList;
@@ -282,6 +285,54 @@ public class MelonService implements IMelonService {
         }
 
         log.info(this.getClass().getName() + ".updateAddBTSNickname End!");
+
+        return res;
+    }
+
+    @Override
+    public int updateManySong() throws Exception{
+        // 로그 찍기
+        log.info(this.getClass().getName() + ".updateManySong Start!");
+
+        int res = 0;
+
+        String colNm = "MELON_" + DateUtil.getDateTime("yyyyMMdd");
+
+        // 기존 수집된 멜론 top100 컬렉션 삭제
+        melonMapper.dropMelonCollection(colNm);
+
+        // 멜론top100 수집하기
+        if (this.collectMelonSong() == 1) {
+            String singer = "방탄소년단";
+            String updateSinger = "BTS";
+            String updateSong = "BTS-SONG";
+
+            res = melonMapper.updateManySong(colNm, singer, updateSinger, updateSong);
+
+        }
+
+        log.info(this.getClass().getName() + ".updateManySong End!");
+
+        return res;
+    }
+
+    @Override
+    public int deleteSong() throws Exception{
+        // 로그 찍기
+        log.info(this.getClass().getName() + ".deleteSong Start!");
+
+        int res = 0;
+
+        // 삭제할 컬렉션
+        String colNm = "MELON_" + DateUtil.getDateTime("yyyyMMdd");
+
+        // 수집된 데이터로부터 삭제할 가수명
+        String singer = "BTS";
+
+        // MongoDB에 데이터저장하기
+        res = melonMapper.deleteSong(colNm, singer);
+
+        log.info(this.getClass().getName() + ".deleteSong End!");
 
         return res;
     }

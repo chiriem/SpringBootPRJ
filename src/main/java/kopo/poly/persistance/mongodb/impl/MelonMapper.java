@@ -348,4 +348,67 @@ public class MelonMapper extends AbstractMongoDBComon implements IMelonMapper {
 
         return res;
     }
+
+    @Override
+    public int updateManySong(String pColNm, String pSinger, String pUpdateSinger, String pUpdateSong) throws Exception {
+
+        log.info(this.getClass().getName() + ".updateManySong Start!");
+
+        int res = 0;
+
+        MongoCollection<Document> col = mongodb.getCollection(pColNm);
+
+        log.info("pColNm : " + pColNm);
+        log.info("pSinger : " + pSinger);
+        log.info("pUpdateSinger : " + pUpdateSinger);
+        log.info("pUpdateSong : " + pUpdateSong);
+
+        // 조회할 조건(SQL의 WHERE 역할 / SELECT * FROM MELON_202204** WHERE SINGER = '방탄소년단')
+        Document query = new Document();
+        query.append("singer", pSinger);
+
+        // MongoDB 데이터 삭제는 반드시 컬렉션을 조회하고, 조회된 ObjectID를 기반으로 데이터를 삭제함
+        // MongoDB 환경은 분산환경(Sharding)으로 구성될 수 있기 때문에 정확한 PK에 매핑하기 위해서임
+        FindIterable<Document> rs = col.find(query);
+
+        // 한 줄로 append해서 수정할 필드 추가해도 되지만, 가독성이 떨어지므로 줄마다 append 함
+        Document updateDoc = new Document();
+        updateDoc.append("singer", pUpdateSinger);
+        updateDoc.append("song", pUpdateSong);
+        updateDoc.append("addData", "난 기존 필드 수정과 동시에 추가하는 데이터"); // 신규 필드 추가
+
+        rs.forEach(doc -> col.updateOne(doc, new Document("$set",updateDoc)));
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".updateManySong End!");
+
+        return res;
+    }
+
+    @Override
+    public int deleteSong(String pColNm, String pSinger) throws Exception {
+
+        log.info(this.getClass().getName() + ".deleteSong Start!");
+
+        int res = 0;
+
+        MongoCollection<Document> col = mongodb.getCollection(pColNm);
+
+        // 조회할 조건(SQL의 WHERE 역할 / SELECT * FROM MELON_202204** WHERE SINGER = '방탄소년단')
+        Document query = new Document();
+        query.append("singer", pSinger);
+
+        // MongoDB 데이터 삭제는 반드시 컬렉션을 조회하고, 조회된 ObjectID를 기반으로 데이터를 삭제함
+        // MongoDB 환경은 분산환경(Sharding)으로 구성될 수 있기 때문에 정확한 PK에 매핑하기 위해서임
+        FindIterable<Document> rs = col.find(query);
+
+        rs.forEach(doc -> col.deleteOne(doc));
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".deleteSong End!");
+
+        return res;
+    }
 }
