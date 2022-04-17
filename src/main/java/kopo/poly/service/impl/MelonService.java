@@ -326,6 +326,7 @@ public class MelonService implements IMelonService {
         // 삭제할 컬렉션
         String colNm = "MELON_" + DateUtil.getDateTime("yyyyMMdd");
 
+
         // 수집된 데이터로부터 삭제할 가수명
         String singer = "BTS";
 
