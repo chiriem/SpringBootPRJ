@@ -36,9 +36,9 @@ public class NoticeController {
      * GetMapping(value = "index") => GET방식을 통해 접속되는 URL이 index인 경우 아래 함수를 실행
      */
 
-    @GetMapping(value="index")
+    @GetMapping(value="MultiST/index")
     public String Index() {
-        return "/index";
+        return "MultiST/index";
     }
 
     /**
