@@ -96,8 +96,130 @@ public class MyRedisMapper implements IMyRedisMapper {
             res = 1;
         }
 
-        log.info(this.getClass().getName() + ".saveRedisStringJSON Start!");
+        log.info(this.getClass().getName() + ".saveRedisStringJSON End!");
 
         return res;
     }
+
+    @Override
+    public int saveRedisList(String redisKey, List<RedisDTO> pList) throws Exception {
+
+        log.info(this.getClass().getName() + ".saveRedisList Start!");
+
+        int res = 0;
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new StringRedisSerializer());
+
+        for (RedisDTO dto : pList) {
+
+            // 오름차순 저장
+            redisDB.opsForList().rightPush(redisKey, CmmUtil.nvl(dto.getTest_text()));
+
+            // 내림차순 저장
+            // redisDB.opsForList().leftPush(redisKey, CmmUtil.nvl(dto.getTest_text()));
+
+        }
+
+        redisDB.expire(redisKey, 5, TimeUnit.HOURS);
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".saveRedisList End!");
+
+        return res;
+
+    }
+
+    @Override
+    public List<String> getRedisList(String redisKey) throws Exception {
+
+        log.info(this.getClass().getName() + ".getRedisList Start!");
+
+        List<String> rList = null;
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new StringRedisSerializer());
+
+        if (redisDB.hasKey(redisKey)) {
+            rList = (List) redisDB.opsForList().range(redisKey, 0, -1);
+        }
+
+        log.info(this.getClass().getName() + ".getRedisList End!");
+
+        return rList;
+    }
+
+    @Override
+    public int saveRedisListJSON(String redisKey, List<RedisDTO> pList) throws Exception {
+
+        log.info(this.getClass().getName() + ".saveRedisListJSON Start!");
+
+        int res = 0;
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new Jackson2JsonRedisSerializer<>(RedisDTO.class));
+
+        for (RedisDTO dto : pList) {
+
+            // 오름차순 저장
+            redisDB.opsForList().rightPush(redisKey, dto);
+
+            // 내림차순 저장
+            // redisDB.opsForList().leftPush(redisKey, dto);
+
+        }
+
+        redisDB.expire(redisKey, 5, TimeUnit.HOURS);
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".saveRedisListJSON End!");
+
+        return res;
+
+    }
+
+    @Override
+    public List<RedisDTO> getRedisListJSON(String redisKey) throws Exception {
+
+        log.info(this.getClass().getName() + ".getRedisListJSON Start!");
+
+        List<RedisDTO> rList = null;
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new Jackson2JsonRedisSerializer<>(RedisDTO.class));
+
+        if (redisDB.hasKey(redisKey)) {
+            rList = (List) redisDB.opsForList().range(redisKey, 0, -1);
+        }
+
+        log.info(this.getClass().getName() + ".getRedisListJSON End!");
+
+        return rList;
+    }
+
+    @Override
+    public int saveRedisListJSONRamda(String redisKey, List<RedisDTO> pList) throws Exception {
+
+        log.info(this.getClass().getName() + ".saveRedisListJSONRamda Start!");
+
+        int res = 0;
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new Jackson2JsonRedisSerializer<>(RedisDTO.class));
+
+        pList.forEach(dto -> redisDB.opsForList().rightPush(redisKey, dto));
+
+        redisDB.expire(redisKey, 5, TimeUnit.HOURS);
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".saveRedisListJSONRamda End!");
+
+        return res;
+
+    }
+
+
 }
