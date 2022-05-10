@@ -25,5 +25,13 @@ public interface IMyRedisService {
     int saveRedisListJSONRamda() throws Exception;
 
     List<RedisDTO> getRedisListJSONRamda() throws Exception;
+
+    int saveRedisHash() throws Exception;
+
+    RedisDTO getRedisHash() throws Exception;
+
+    int saveRedisSetJSONRamda() throws Exception;
+
+    Set<RedisDTO> getRedisSetJSONRamda() throws Exception;
 }
 

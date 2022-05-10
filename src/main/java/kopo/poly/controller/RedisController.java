@@ -177,4 +177,70 @@ public class RedisController {
 
         return rList;
     }
+
+    @GetMapping(value = "redis/saveRedisHash")
+    public String saveRedisHash() throws Exception {
+
+        log.info(this.getClass().getName() + ".saveRedisHash Start!");
+
+        String msg;
+
+        int res = myRedisService.saveRedisHash();
+
+        if (res == 1) {
+            msg = "success";
+        } else {
+            msg = "fail";
+        }
+
+        log.info(this.getClass().getName() + ".saveRedisHash End!");
+
+        return msg;
+    }
+
+    @GetMapping(value = "redis/getRedisHash")
+    public RedisDTO getRedisHash() throws Exception {
+
+        log.info(this.getClass().getName() + ".getRedisHash Start!");
+
+        RedisDTO rDTO = myRedisService.getRedisHash();
+
+        log.info(this.getClass().getName() + ".getRedisHash End!");
+
+        return rDTO;
+    }
+
+    @GetMapping(value = "redis/saveRedisSetJSONRamda")
+    public String saveRedisSetJSONRamda() throws Exception {
+
+        log.info(this.getClass().getName() + ".saveRedisSetJSONRamda Start!");
+
+        // 수집 결과 출력
+        String msg;
+
+        int res = myRedisService.saveRedisSetJSONRamda();
+
+        if (res == 1) {
+            msg = "success";
+
+        } else {
+            msg = "fail";
+        }
+
+        log.info(this.getClass().getName() + ".saveRedisSetJSONRamda End!");
+
+        return msg;
+    }
+
+    @GetMapping(value = "redis/getRedisSetJSONRamda")
+    public Set<RedisDTO> getRedisSetJSONRamda() throws Exception {
+
+        log.info(this.getClass().getName() + ".getRedisSetJSONRamda Start!");
+
+        Set<RedisDTO> rSet = myRedisService.getRedisSetJSONRamda();
+
+        log.info(this.getClass().getName() + ".getRedisSetJSONRamda End!");
+
+        return rSet;
+    }
 }

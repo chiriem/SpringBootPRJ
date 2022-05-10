@@ -7,9 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 
 @Slf4j
@@ -203,5 +201,86 @@ public class MyRedisService implements IMyRedisService {
         log.info(this.getClass().getName() + ".getRedisListJSONRamda End!");
 
         return rList;
+    }
+
+    @Override
+    public int saveRedisHash() throws Exception {
+
+        log.info(this.getClass().getName() + ".saveRedisHash Start!");
+
+        String redisKey = "myRedis_Hash";
+
+        RedisDTO pDTO = new RedisDTO();
+        pDTO.setName("장석원");
+        pDTO.setAddr("일산");
+        pDTO.setEmail("maoru23@gmail.com");
+
+        int res = myRedisMapper.saveRedisHash(redisKey, pDTO);
+
+        log.info(this.getClass().getName() + ".saveRedisHash End!");
+
+        return res;
+    }
+
+    @Override
+    public RedisDTO getRedisHash() throws Exception {
+
+        log.info(this.getClass().getName() + ".getRedisHash Start!");
+
+        String redisKey = "myRedis_Hash";
+
+        RedisDTO rDTO = myRedisMapper.getRedisHash(redisKey);
+
+        if (rDTO == null) {
+            rDTO = new RedisDTO();
+        }
+        log.info(this.getClass().getName() + ".getRedisHash End!");
+
+        return rDTO;
+    }
+
+    @Override
+    public int saveRedisSetJSONRamda() throws Exception{
+        log.info(this.getClass().getName() + ".saveRedisSetJsonRamda start!");
+
+        String redisKey = "myRedis_Set_JSON";
+
+        Set<RedisDTO> pSet = new HashSet<>();
+
+        for (int i = 0; i < 10; i++) {
+
+            RedisDTO pDTO = new RedisDTO();
+            pDTO.setTest_text(i + "번째 데이터 입니다.");
+            pDTO.setName("장석원[" + i + "]");
+            pDTO.setAddr("서울");
+            pDTO.setEmail("maoru23@gmail.com");
+
+            pSet.add(pDTO);
+            pDTO = null;
+        }
+
+        int res = myRedisMapper.saveRedisSetJSONRamda(redisKey, pSet);
+
+        log.info(this.getClass().getName() + ".saveRedisSetJsonRamda End!");
+
+        return res;
+    }
+
+    @Override
+    public Set<RedisDTO> getRedisSetJSONRamda() throws Exception {
+
+        log.info(this.getClass().getName() + ".getRedisSetJSONRamda Start!");
+
+        String redisKey = "myRedis_Set_JSON";
+
+        Set<RedisDTO> rSet = myRedisMapper.getRedisSetJSONRamda(redisKey);
+
+        if (rSet == null) {
+            rSet = new HashSet<>();
+        }
+
+        log.info(this.getClass().getName() + ".getRedisSetJSONRamda End!");
+
+        return rSet;
     }
 }

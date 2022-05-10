@@ -23,4 +23,11 @@ public interface IMyRedisMapper {
 
     int saveRedisListJSONRamda(String redisKey, List<RedisDTO> pList) throws Exception;
 
+    int saveRedisHash(String redisKey, RedisDTO DTO) throws Exception;
+
+    RedisDTO getRedisHash(String redisKey) throws Exception;
+
+    int saveRedisSetJSONRamda(String redisKey, Set<RedisDTO> pSet) throws Exception;
+
+    Set<RedisDTO> getRedisSetJSONRamda(String redisKey) throws Exception;
 }

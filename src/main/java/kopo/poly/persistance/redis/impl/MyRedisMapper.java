@@ -221,5 +221,98 @@ public class MyRedisMapper implements IMyRedisMapper {
 
     }
 
+    @Override
+    public int saveRedisHash(String redisKey, RedisDTO pDTO) throws Exception {
 
+        log.info(this.getClass().getName() + ".saveRedisHash Start!");
+
+        int res = 0;
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new StringRedisSerializer());
+
+        redisDB.opsForHash().put(redisKey, "name", CmmUtil.nvl(pDTO.getName()));
+        redisDB.opsForHash().put(redisKey, "email", CmmUtil.nvl(pDTO.getEmail()));
+        redisDB.opsForHash().put(redisKey, "addr", CmmUtil.nvl(pDTO.getAddr()));
+
+        redisDB.expire(redisKey, 100, TimeUnit.MINUTES);
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".saveRedisHash End!");
+
+        return res;
+
+    }
+
+    @Override
+    public RedisDTO getRedisHash(String redisKey) throws Exception {
+
+        log.info(this.getClass().getName() + ".getRedisHash Start!");
+
+        RedisDTO rDTO = new RedisDTO();
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new StringRedisSerializer());
+
+        if (redisDB.hasKey(redisKey)) {
+            String name = CmmUtil.nvl((String) redisDB.opsForHash().get(redisKey, "name"));
+            String email = CmmUtil.nvl((String) redisDB.opsForHash().get(redisKey, "email"));
+            String addr = CmmUtil.nvl((String) redisDB.opsForHash().get(redisKey, "addr"));
+
+            log.info("name : " + name);
+            log.info("email : " + email);
+            log.info("addr : " + addr);
+
+            rDTO.setName(name);
+            rDTO.setEmail(email);
+            rDTO.setAddr(addr);
+        }
+
+        log.info(this.getClass().getName() + ".getRedisHash End!");
+
+        return rDTO;
+
+    }
+
+    @Override
+    public int saveRedisSetJSONRamda(String redisKey, Set<RedisDTO> pSet) throws Exception {
+
+        log.info(this.getClass().getName() + ".saveRedisSetJSONRamda Start!");
+
+        int res = 0;
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new Jackson2JsonRedisSerializer<>(RedisDTO.class));
+
+        pSet.forEach(dto -> redisDB.opsForSet().add(redisKey, dto));
+
+        redisDB.expire(redisKey, 5, TimeUnit.HOURS);
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".saveRedisSetJSONRamda End!");
+
+        return res;
+
+    }
+
+    @Override
+    public Set<RedisDTO> getRedisSetJSONRamda(String redisKey) throws Exception {
+
+        log.info(this.getClass().getName() + ".getRedisSetJSONRamda Start!");
+
+        Set<RedisDTO> rSet = null;
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new Jackson2JsonRedisSerializer<>(RedisDTO.class));
+
+        if (redisDB.hasKey(redisKey)) {
+            rSet = (Set) redisDB.opsForSet().members(redisKey);
+        }
+
+        log.info(this.getClass().getName() + ".getRedisSetJSONRamda End!");
+
+        return rSet;
+    }
 }
