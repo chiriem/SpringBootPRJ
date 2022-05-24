@@ -283,4 +283,75 @@ public class MyRedisService implements IMyRedisService {
 
         return rSet;
     }
+
+    @Override
+    public int saveRedisZSetJSON() throws Exception{
+        log.info(this.getClass().getName() + ".saveRedisZSetJson start!");
+
+        String redisKey = "myRedis_ZSet_JSON";
+
+        List<RedisDTO> pList = new LinkedList<>();
+
+        for (int i = 0; i < 10; i++) {
+
+            RedisDTO pDTO = new RedisDTO();
+            pDTO.setTest_text(i+1 + "번째 데이터 입니다.");
+            pDTO.setName("장석원[" + i + "]");
+            pDTO.setAddr("일산");
+            pDTO.setEmail("maoru23@gmail.com");
+
+            pList.add(pDTO);
+            pDTO = null;
+        }
+
+        int res = myRedisMapper.saveRedisZSetJSON(redisKey, pList);
+
+        log.info(this.getClass().getName() + ".saveRedisZSetJson End!");
+
+        return res;
+    }
+
+    @Override
+    public Set<RedisDTO> getRedisZSetJSON() throws Exception {
+
+        log.info(this.getClass().getName() + ".getRedisZSetJSON Start!");
+
+        String redisKey = "myRedis_ZSet_JSON";
+
+        Set<RedisDTO> rSet = myRedisMapper.getRedisZSetJSON(redisKey);
+
+        if (rSet == null) {
+            rSet = new HashSet<>();
+        }
+
+        log.info(this.getClass().getName() + ".getRedisZSetJSON End!");
+
+        return rSet;
+    }
+
+    @Override
+    public boolean deleteDataJSON() throws Exception {
+        log.info(this.getClass().getName() + ".deleteDate Start!");
+
+        String redisKey = "myRedis_ZSet_JSON";
+
+        boolean res = myRedisMapper.deleteDataJSON(redisKey);
+
+        log.info(this.getClass().getName() + ".deleteDate end!");
+
+        return res;
+    }
+
+    @Override
+    public boolean deleteDataString() throws Exception {
+        log.info(this.getClass().getName() + ".deleteDate Start!");
+
+        String redisKey = "myRedis_Hash";
+
+        boolean res = myRedisMapper.deleteDataString(redisKey);
+
+        log.info(this.getClass().getName() + ".deleteDate end!");
+
+        return res;
+    }
 }

@@ -315,4 +315,92 @@ public class MyRedisMapper implements IMyRedisMapper {
 
         return rSet;
     }
+
+    @Override
+    public int saveRedisZSetJSON(String redisKey, List<RedisDTO> pList) throws Exception {
+
+        log.info(this.getClass().getName() + ".saveRedisZSetJSON Start!");
+
+        int res = 0;
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new Jackson2JsonRedisSerializer<>(RedisDTO.class));
+
+        int idx = 0;
+
+        for (RedisDTO dto : pList) {
+            redisDB.opsForZSet().add(redisKey, dto, ++idx);
+        }
+
+        redisDB.expire(redisKey, 5, TimeUnit.HOURS);
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".saveRedisZSetJSON End!");
+
+        return res;
+
+    }
+
+    @Override
+    public Set<RedisDTO> getRedisZSetJSON(String redisKey) throws Exception {
+
+        log.info(this.getClass().getName() + ".getRedisZSetJSON Start!");
+
+        Set<RedisDTO> rSet = null;
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new Jackson2JsonRedisSerializer<>(RedisDTO.class));
+
+        if (redisDB.hasKey(redisKey)) {
+            long cnt = redisDB.opsForZSet().size(redisKey);
+            rSet = (Set) redisDB.opsForZSet().range(redisKey, 0, cnt);
+        }
+
+        log.info(this.getClass().getName() + ".getRedisZSetJSON End!");
+
+        return rSet;
+    }
+
+    @Override
+    public boolean deleteDataJSON(String redisKey) throws Exception {
+
+        log.info(this.getClass().getName() + ".deleteDataJSON Start!");
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new Jackson2JsonRedisSerializer<>(RedisDTO.class));
+
+        boolean res = false;
+
+        if (redisDB.hasKey(redisKey)) {
+            redisDB.delete(redisKey);
+
+            res = true;
+        }
+
+        log.info(this.getClass().getName() + ".deleteDataJSON End!");
+
+        return res;
+    }
+
+    @Override
+    public boolean deleteDataString(String redisKey) throws Exception {
+
+        log.info(this.getClass().getName() + ".deleteDataString Start!");
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new Jackson2JsonRedisSerializer<>(RedisDTO.class));
+
+        boolean res = false;
+
+        if (redisDB.hasKey(redisKey)) {
+            redisDB.delete(redisKey);
+
+            res = true;
+        }
+
+        log.info(this.getClass().getName() + ".deleteDataString End!");
+
+        return res;
+    }
 }

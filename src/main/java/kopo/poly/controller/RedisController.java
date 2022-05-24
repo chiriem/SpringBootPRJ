@@ -243,4 +243,60 @@ public class RedisController {
 
         return rSet;
     }
+
+    @GetMapping(value = "redis/saveRedisZSetJSON")
+    public String saveRedisZSetJSON() throws Exception {
+
+        log.info(this.getClass().getName() + ".saveRedisZSetJSON Start!");
+
+        // 수집 결과 출력
+        String msg;
+
+        int res = myRedisService.saveRedisZSetJSON();
+
+        if (res == 1) {
+            msg = "success";
+
+        } else {
+            msg = "fail";
+        }
+
+        log.info(this.getClass().getName() + ".saveRedisZSetJSON End!");
+
+        return msg;
+    }
+
+    @GetMapping(value = "redis/getRedisZSetJSON")
+    public Set<RedisDTO> getRedisZSetJSON() throws Exception {
+
+        log.info(this.getClass().getName() + ".getRedisZSetJSON Start!");
+
+        Set<RedisDTO> rSet = myRedisService.getRedisZSetJSON();
+
+        log.info(this.getClass().getName() + ".getRedisZSetJSON End!");
+
+        return rSet;
+    }
+
+    @GetMapping(value = "redis/deleteDataJSON")
+    public boolean deleteDataJSON() throws Exception {
+        log.info(this.getClass().getName() + ".deleteDataJSON Start!");
+
+        boolean res = myRedisService.deleteDataJSON();
+
+        log.info(this.getClass().getName() + ".deleteDataJSON End!");
+
+        return res;
+    }
+
+    @GetMapping(value = "redis/deleteDataString")
+    public boolean deleteDataString() throws Exception {
+        log.info(this.getClass().getName() + ".deleteDataString Start!");
+
+        boolean res = myRedisService.deleteDataString();
+
+        log.info(this.getClass().getName() + ".deleteDataString End!");
+
+        return res;
+    }
 }
